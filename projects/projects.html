@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>All Projects — Lathika M</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root { --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+
+    [data-theme="dark"] {
+      --bg: #0e0e0e; --bg2: #151515; --bg3: #1c1c1c; --surface: #1f1f1f;
+      --border: rgba(255,255,255,0.08); --text: #f0ece4;
+      --text-muted: #8a8478; --text-dim: #5a564f;
+      --accent: #c9a96e; --accent2: #e8c89a;
+      --accent-rgb: 201,169,110; --nav-bg: rgba(14,14,14,0.92);
+    }
+    [data-theme="light"] {
+      --bg: #faf8f4; --bg2: #f3f0ea; --bg3: #ece8df; --surface: #ffffff;
+      --border: rgba(0,0,0,0.08); --text: #1a1814;
+      --text-muted: #6b6359; --text-dim: #a09890;
+      --accent: #8b6914; --accent2: #b08a35;
+      --accent-rgb: 139,105,20; --nav-bg: rgba(250,248,244,0.92);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      transition: background var(--transition), color var(--transition);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: 0.4;
+    }
+
+    /* ── CUSTOM CURSOR ── */
+    * { cursor: none !important; }
+    #cursor-dot {
+      width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 99999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.08s ease, width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+    }
+    #cursor-ring {
+      width: 36px; height: 36px; border: 1.5px solid rgba(var(--accent-rgb),0.55);
+      border-radius: 50%; position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 99998; transform: translate(-50%,-50%);
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+    }
+    body.cursor-hover #cursor-ring { width: 56px; height: 56px; border-color: var(--accent); }
+    body.cursor-hover #cursor-dot  { width: 4px; height: 4px; opacity: 0.6; }
+    body.cursor-click #cursor-dot  { transform: translate(-50%,-50%) scale(2.5); }
+    @media (hover: none) { #cursor-dot, #cursor-ring { display: none; } * { cursor: auto !important; } }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--nav-bg); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(24px, 5vw, 80px);
+      display: flex; align-items: center; justify-content: space-between;
+      height: 64px; transition: background var(--transition);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;
+      font-weight: 600; letter-spacing: 0.05em;
+      color: var(--accent); text-decoration: none;
+    }
+    .nav-right { display: flex; align-items: center; gap: 1.2rem; }
+    .theme-toggle {
+      background: none; border: 1px solid var(--border); color: var(--text-muted);
+      cursor: pointer; padding: 6px 10px; border-radius: 4px; font-size: 0.9rem;
+      transition: all 0.2s; display: flex; align-items: center; gap: 6px;
+    }
+    .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.75rem; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-muted); text-decoration: none;
+      padding: 8px 18px; border: 1px solid var(--border); border-radius: 3px;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── PAGE ── */
+    .page {
+      padding: 100px clamp(24px, 5vw, 80px) 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-eyebrow {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.8rem; display: flex; align-items: center; gap: 10px;
+    }
+    .page-eyebrow::before {
+      content: ''; width: 24px; height: 1px; background: var(--accent); display: inline-block;
+    }
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 5vw, 4.5rem);
+      font-weight: 300; line-height: 1.08; color: var(--text); margin-bottom: 0.3em;
+    }
+    .page-title em { font-style: italic; color: var(--accent); }
+    .page-subtitle {
+      font-size: 0.9rem; color: var(--text-muted); font-weight: 300;
+      line-height: 1.7; max-width: 480px; margin-bottom: 3.5rem;
+    }
+
+    /* ── PROJECT CARDS ── */
+    .projects-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+      position: relative;
+    }
+    .card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(var(--accent-rgb),0.03), transparent);
+      opacity: 0; transition: opacity 0.4s; pointer-events: none;
+    }
+    .card:hover { background: var(--bg3); border-color: rgba(var(--accent-rgb),0.18); }
+    .card:hover::before { opacity: 1; }
+
+    .card-main { padding: 2.5rem 3rem; }
+
+    /* top row */
+    .card-top {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 2rem; align-items: start;
+    }
+
+    .project-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.78rem; font-weight: 300;
+      font-style: italic; color: var(--text-dim);
+      letter-spacing: 0.1em; margin-bottom: 0.6rem;
+    }
+
+    .project-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.85rem; font-weight: 400;
+      color: var(--text); line-height: 1.15; margin-bottom: 0.4rem;
+    }
+
+    .project-tagline {
+      font-size: 0.78rem; font-weight: 300; font-style: italic;
+      color: var(--accent2); letter-spacing: 0.04em; margin-bottom: 1rem;
+    }
+
+    .project-desc {
+      font-size: 0.88rem; font-weight: 300;
+      color: var(--text-muted); line-height: 1.8; margin-bottom: 1.5rem;
+      max-width: 680px;
+    }
+
+    .tech {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0;
+    }
+    .tech span {
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.06em; padding: 4px 9px;
+      background: rgba(var(--accent-rgb), 0.08);
+      color: var(--accent); border-radius: 2px;
+    }
+
+    /* card action buttons */
+    .card-actions {
+      display: flex; flex-direction: column; gap: 10px;
+      align-items: flex-end; flex-shrink: 0;
+    }
+
+    .toggle-btn, .github-btn {
+      font-family: 'DM Mono', monospace; font-size: 0.68rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 9px 16px; border: 1px solid var(--border);
+      background: transparent; color: var(--text-muted);
+      border-radius: 3px; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: all 0.25s ease; text-decoration: none;
+      white-space: nowrap;
+    }
+    .toggle-btn:hover, .github-btn:hover {
+      border-color: var(--accent); color: var(--accent);
+      background: rgba(var(--accent-rgb), 0.04);
+      transform: translateY(-1px);
+    }
+    .toggle-btn.open { border-color: var(--accent); color: var(--accent); }
+    .toggle-btn svg, .github-btn svg {
+      width: 12px; height: 12px; stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ── DETAILS PANEL ── */
+    .details {
+      max-height: 0; overflow: hidden; opacity: 0;
+      transition: max-height 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+                  opacity 0.4s ease;
+    }
+    .details.active { max-height: 1200px; opacity: 1; }
+
+    .details-inner {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 3rem;
+      background: var(--bg2);
+    }
+
+    .details-label {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--text-dim); margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .details-label::before {
+      content: ''; width: 20px; height: 1px; background: var(--text-dim); display: inline-block;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .detail-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .detail-box:hover { border-color: rgba(var(--accent-rgb), 0.3); }
+
+    .detail-box-header {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border);
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .detail-img, .detail-video {
+      width: 100%; height: 190px;
+      object-fit: cover; display: block;
+      cursor: zoom-in; transition: opacity 0.2s;
+    }
+    .detail-img:hover { opacity: 0.88; }
+    .detail-video { cursor: default; }
+
+    /* ── MODAL ── */
+    .modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.93);
+      justify-content: center; align-items: center;
+      z-index: 9998; padding: 2rem;
+    }
+    .modal.open { display: flex; }
+    .modal-img {
+      max-width: 90vw; max-height: 88vh;
+      border: 1px solid rgba(var(--accent-rgb),0.35);
+      border-radius: 4px; box-shadow: 0 0 80px rgba(0,0,0,0.6);
+    }
+    .modal-close {
+      position: fixed; top: 1.5rem; right: 2rem;
+      background: none; border: 1px solid var(--border);
+      color: var(--text-muted); padding: 8px 14px; border-radius: 3px;
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.1em; cursor: pointer; transition: all 0.2s;
+    }
+    .modal-close:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── DIVIDER BETWEEN CARDS ── */
+    .card + .card { margin-top: 2px; }
+
+    /* ── FADE UP ── */
+    .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: none; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2rem clamp(24px, 5vw, 80px);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-copy { font-size: 0.75rem; color: var(--text-dim); }
+    .footer-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .card-main { padding: 1.8rem; }
+      .card-top { grid-template-columns: 1fr; }
+      .card-actions { flex-direction: row; align-items: flex-start; }
+      .details-grid { grid-template-columns: 1fr; }
+      .details-inner { padding: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── CUSTOM CURSOR ── -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="nav-logo">L.M</a>
+  <div class="nav-right">
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <span id="theme-icon">☀</span>
+      <span id="theme-label" style="font-size:0.72rem;letter-spacing:0.08em;">Light</span>
+    </button>
+    <a href="index.html" class="back-btn">
+      ← Back to Portfolio
+    </a>
+  </div>
+</nav>
+
+<!-- ── PAGE ── -->
+<div class="page">
+
+  <div class="page-eyebrow">All Projects</div>
+  <h1 class="page-title">Every project<br><em>tells a story</em></h1>
+  <p class="page-subtitle">A full archive of my work — from real-time computer vision to NLP pipelines and ensemble forecasting models.</p>
+
+  <div class="projects-list">
+
+    <!-- ── PROJECT 1 ── -->
+    <div class="card fade-up">
+      <div class="card-main">
+        <div class="card-top">
+          <div>
+            <div class="project-num">Project № 01</div>
+            <h2 class="project-name">SpeedCamera</h2>
+            <p class="project-tagline">Real-time traffic violation detection system</p>
+            <p class="project-desc">
+              A GPU-accelerated traffic monitoring pipeline using YOLOv8 for vehicle detection and ByteTrack/Supervision for multi-object tracking across live CCTV feeds. TensorRT + CUDA optimisation delivers 2× inference speedup, enabling 30+ FPS on a single GPU. Includes a FastAPI backend and React.js dashboard for live violation logging.
+            </p>
+            <div class="tech">
+              <span>YOLOv8</span><span>OpenCV</span><span>FastAPI</span>
+              <span>React.js</span><span>TensorRT</span><span>CUDA</span><span>ByteTrack</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="toggle-btn" onclick="toggle(this)" aria-expanded="false">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+              View Details
+            </button>
+            <a href="https://github.com/Lathika1104" target="_blank" rel="noopener" class="github-btn">
+              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="details">
+        <div class="details-inner">
+          <div class="details-label">Project Media</div>
+          <div class="details-grid">
+            <div class="detail-box">
+              <div class="detail-box-header">Architecture</div>
+              <img src="assets/speed/speed-architecture.png" class="detail-img" alt="SpeedCamera Architecture" onclick="openZoom(this)">
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Live Demo</div>
+              <video class="detail-video" controls muted loop playsinline>
+                <source src="assets/speed/speed-demo.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Output</div>
+              <img src="assets/speed/speed-output.png" class="detail-img" alt="SpeedCamera Output" onclick="openZoom(this)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROJECT 2 ── -->
+    <div class="card fade-up" style="transition-delay:0.08s">
+      <div class="card-main">
+        <div class="card-top">
+          <div>
+            <div class="project-num">Project № 02</div>
+            <h2 class="project-name">Blockchain-Based IPS</h2>
+            <p class="project-tagline">ML + Blockchain intrusion prevention system</p>
+            <p class="project-desc">
+              An intrusion prevention system powered by XGBoost for threat classification, coupled with blockchain-based immutable audit logging. Provides tamper-proof records of all detected intrusion events with real-time alerting through a FastAPI backend.
+            </p>
+            <div class="tech">
+              <span>Python</span><span>FastAPI</span><span>XGBoost</span>
+              <span>Blockchain</span><span>Scikit-learn</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="toggle-btn" onclick="toggle(this)" aria-expanded="false">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+              View Details
+            </button>
+            <a href="https://github.com/Lathika1104" target="_blank" rel="noopener" class="github-btn">
+              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="details">
+        <div class="details-inner">
+          <div class="details-label">Project Media</div>
+          <div class="details-grid">
+            <div class="detail-box">
+              <div class="detail-box-header">Architecture</div>
+              <img src="assets/ips/ips-architecture.png" class="detail-img" alt="IPS Architecture" onclick="openZoom(this)">
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Live Demo</div>
+              <video class="detail-video" controls muted loop playsinline>
+                <source src="assets/ips/ips-demo.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Output</div>
+              <img src="assets/ips/ips-output.png" class="detail-img" alt="IPS Output" onclick="openZoom(this)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROJECT 3 ── -->
+    <div class="card fade-up" style="transition-delay:0.16s">
+      <div class="card-main">
+        <div class="card-top">
+          <div>
+            <div class="project-num">Project № 03</div>
+            <h2 class="project-name">Sentiment-Driven LLM Optimizer</h2>
+            <p class="project-tagline">NLP pipeline + prompt engineering dashboard</p>
+            <p class="project-desc">
+              Fine-tuned BERT model achieving 88% accuracy on 5,000 customer reviews for sentiment classification. Streamlit dashboard surfaces trends across product categories, and GPT-style summaries of negative reviews enable 3× faster issue triage.
+            </p>
+            <div class="tech">
+              <span>BERT</span><span>HuggingFace</span><span>Streamlit</span>
+              <span>NLTK</span><span>Pandas</span><span>Python</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="toggle-btn" onclick="toggle(this)" aria-expanded="false">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+              View Details
+            </button>
+            <a href="https://github.com/Lathika1104" target="_blank" rel="noopener" class="github-btn">
+              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="details">
+        <div class="details-inner">
+          <div class="details-label">Project Media</div>
+          <div class="details-grid">
+            <div class="detail-box">
+              <div class="detail-box-header">Pipeline</div>
+              <img src="assets/sentiment/sentiment-pipeline.png" class="detail-img" alt="Sentiment Pipeline" onclick="openZoom(this)">
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Dashboard</div>
+              <img src="assets/sentiment/sentiment-dashboard.png" class="detail-img" alt="Sentiment Dashboard" onclick="openZoom(this)">
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Results</div>
+              <img src="assets/sentiment/sentiment-output.png" class="detail-img" alt="Sentiment Results" onclick="openZoom(this)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── PROJECT 4 ── -->
+    <div class="card fade-up" style="transition-delay:0.24s">
+      <div class="card-main">
+        <div class="card-top">
+          <div>
+            <div class="project-num">Project № 04</div>
+            <h2 class="project-name">Stock Price Prediction</h2>
+            <p class="project-tagline">Ensemble regression forecasting model</p>
+            <p class="project-desc">
+              Multi-model forecasting system comparing Linear Regression, Random Forest, and Gradient Boosting on 5 years of historical data. Achieved R² of 0.90 as baseline; Random Forest reduced RMSE by 18% post hyperparameter tuning. Includes lag features, rolling window statistics, and normalisation.
+            </p>
+            <div class="tech">
+              <span>Scikit-learn</span><span>Pandas</span><span>NumPy</span>
+              <span>Matplotlib</span><span>Seaborn</span><span>Python</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="toggle-btn" onclick="toggle(this)" aria-expanded="false">
+              <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+              View Details
+            </button>
+            <a href="https://github.com/Lathika1104" target="_blank" rel="noopener" class="github-btn">
+              <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+              View Code
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="details">
+        <div class="details-inner">
+          <div class="details-label">Project Media</div>
+          <div class="details-grid">
+            <div class="detail-box">
+              <div class="detail-box-header">Model Comparison</div>
+              <img src="assets/stock/stock-comparison.png" class="detail-img" alt="Stock Model Comparison" onclick="openZoom(this)">
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Prediction vs Actual</div>
+              <img src="assets/stock/stock-prediction.png" class="detail-img" alt="Stock Prediction" onclick="openZoom(this)">
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-header">Feature Importance</div>
+              <img src="assets/stock/stock-features.png" class="detail-img" alt="Stock Feature Importance" onclick="openZoom(this)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /projects-list -->
+</div><!-- /page -->
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-copy">© 2026 <span class="footer-name">Lathika M</span> — All projects.</div>
+  <a href="index.html" style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--text-dim);text-decoration:none;transition:color 0.2s;"
+     onmouseover="this.style.color='var(--accent)'" onmouseout="this.style.color='var(--text-dim)'">
+    ← Back to Portfolio
+  </a>
+</footer>
+
+<!-- ── MODAL ── -->
+<div class="modal" id="modal" onclick="closeZoom(event)">
+  <button class="modal-close" onclick="closeModal()">ESC · Close</button>
+  <img class="modal-img" id="modal-img" src="" alt="Full size">
+</div>
+
+<script>
+  // ── THEME ──
+  function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('theme-icon').textContent = isDark ? '☾' : '☀';
+    document.getElementById('theme-label').textContent = isDark ? 'Dark' : 'Light';
+  }
+
+  // ── TOGGLE DETAILS ──
+  function toggle(btn) {
+    const details = btn.closest('.card').querySelector('.details');
+    const isOpen = details.classList.toggle('active');
+    btn.classList.toggle('open', isOpen);
+    btn.setAttribute('aria-expanded', isOpen);
+    btn.querySelector('svg polyline').setAttribute('points', isOpen ? '6 15 12 9 18 15' : '6 9 12 15 18 9');
+    btn.lastChild.textContent = ' ' + (isOpen ? 'Hide Details' : 'View Details');
+  }
+
+  // ── MODAL ──
+  function openZoom(img) {
+    document.getElementById('modal-img').src = img.src;
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeZoom(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // ── SCROLL ANIMATIONS ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── CUSTOM CURSOR ──
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let ringX = 0, ringY = 0, dotX = 0, dotY = 0;
+
+  document.addEventListener('mousemove', e => {
+    dotX = e.clientX; dotY = e.clientY;
+    dot.style.left = dotX + 'px'; dot.style.top = dotY + 'px';
+  });
+  (function animateRing() {
+    ringX += (dotX - ringX) * 0.12; ringY += (dotY - ringY) * 0.12;
+    ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+  document.querySelectorAll('a, button, .detail-img').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+  });
+  document.addEventListener('mousedown', () => document.body.classList.add('cursor-click'));
+  document.addEventListener('mouseup',   () => document.body.classList.remove('cursor-click'));
+  document.addEventListener('mouseleave', () => { dot.style.opacity = '0'; ring.style.opacity = '0'; });
+  document.addEventListener('mouseenter', () => { dot.style.opacity = '1'; ring.style.opacity = '1'; });
+</script>
+</body>
+</html>
