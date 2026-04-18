@@ -236,120 +236,96 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: center;
-      padding: 0 clamp(24px, 5vw, 80px);
+      padding: 100px clamp(24px, 5vw, 80px) 60px;
+      gap: 80px;
       position: relative;
       overflow: hidden;
-      background: var(--bg);
     }
 
-    /* Radial spotlight behind the photo */
-    #hero::after {
-      content: '';
+    .hero-bg-line {
       position: absolute;
-      right: 0; top: 0;
-      width: 60%; height: 100%;
-      background: radial-gradient(ellipse at 70% 50%,
-        rgba(var(--accent-rgb), 0.08) 0%,
-        transparent 65%);
+      right: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+      opacity: 0.3;
+    }
+
+    .hero-grid-deco {
+      position: absolute;
+      top: 0; right: 0;
+      width: 50%;
+      height: 100%;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.4;
       pointer-events: none;
-      z-index: 0;
     }
 
-    /* ── HERO LEFT ── */
-    .hero-left {
-      position: relative;
-      z-index: 2;
-      padding: 100px 0 60px;
-    }
-
-    .hero-hello {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem;
-      font-weight: 300;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero-name-small {
+    .hero-eyebrow {
       font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.2rem;
+      margin-bottom: 1.5rem;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
-    .hero-name-small::before {
+    .hero-eyebrow::before {
       content: '';
       display: inline-block;
-      width: 28px; height: 1px;
+      width: 32px; height: 1px;
       background: var(--accent);
     }
 
     .hero-name {
       font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3.2rem, 6.5vw, 6rem);
-      font-weight: 600;
-      line-height: 1.0;
-      letter-spacing: 0.01em;
+      font-size: clamp(3.5rem, 7vw, 6.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
       color: var(--text);
-      text-transform: uppercase;
-      margin-bottom: 0.15em;
+      margin-bottom: 0.3em;
     }
     .hero-name em {
       font-style: italic;
-      font-weight: 300;
       color: var(--accent);
-      font-size: 0.9em;
-      text-transform: none;
-      display: block;
     }
 
     .hero-title {
-      font-size: 0.88rem;
+      font-size: 1rem;
       font-weight: 300;
       color: var(--text-muted);
-      letter-spacing: 0.08em;
-      margin-bottom: 0.8rem;
+      letter-spacing: 0.03em;
+      margin-bottom: 2rem;
       line-height: 1.7;
     }
 
-    .hero-divider {
-      width: 48px; height: 1px;
-      background: var(--accent);
-      margin: 1.2rem 0;
-      opacity: 0.6;
-    }
-
     .hero-desc {
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       font-weight: 300;
       color: var(--text-muted);
       line-height: 1.8;
-      max-width: 420px;
-      margin-bottom: 2.2rem;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+      border-left: 2px solid var(--accent);
+      padding-left: 1.2rem;
     }
 
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      align-items: center;
-      margin-bottom: 2.8rem;
-    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
 
     .btn-primary {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 500;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--bg);
       background: var(--accent);
       text-decoration: none;
-      padding: 13px 28px;
+      padding: 14px 32px;
       border-radius: 3px;
       transition: opacity 0.2s, transform 0.2s;
       display: inline-block;
@@ -357,56 +333,55 @@
     .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
 
     .btn-secondary {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 500;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-muted);
       background: none;
       text-decoration: none;
-      padding: 12px 28px;
+      padding: 14px 32px;
       border: 1px solid var(--border);
       border-radius: 3px;
       transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      display: inline-block;
     }
     .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
 
-    /* ── HERO STATS ROW ── */
     .hero-stats {
-      display: flex;
-      gap: 0;
-      align-items: stretch;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
     }
 
     .stat-item {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 0 2rem 0 0;
-      margin-right: 2rem;
-      border-right: 1px solid var(--border);
-      transition: none;
+      background: var(--surface);
+      padding: 2rem 1.8rem;
+      transition: background var(--transition);
     }
-    .stat-item:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+    .stat-item:hover { background: var(--bg3); }
 
     .stat-num {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2.4rem;
-      font-weight: 600;
+      font-size: 3rem;
+      font-weight: 300;
       color: var(--accent);
       line-height: 1;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.4rem;
     }
 
     .stat-label {
-      font-size: 0.65rem;
+      font-size: 0.75rem;
       font-weight: 400;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--text-dim);
+      color: var(--text-muted);
     }
 
     .hero-badge {
@@ -416,155 +391,21 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 100px;
-      padding: 7px 14px;
-      font-size: 0.7rem;
+      padding: 8px 16px;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      margin-bottom: 2rem;
+      margin-top: 1.5rem;
     }
     .hero-badge::before {
       content: '';
-      width: 6px; height: 6px;
+      width: 7px; height: 7px;
       border-radius: 50%;
       background: #4ade80;
       animation: pulse 2s infinite;
-      flex-shrink: 0;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.4; }
-    }
-
-    /* ── HERO RIGHT — PHOTO FRAME ── */
-    .hero-right {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      min-height: 600px;
-    }
-
-    /* The diamond/rhombus frame */
-    .hero-photo-wrap {
-      position: relative;
-      width: min(380px, 42vw);
-      aspect-ratio: 1;
-    }
-
-    /* Glowing rotating diamond border */
-    .hero-diamond {
-      position: absolute;
-      inset: -18px;
-      border: 1.5px solid var(--accent);
-      transform: rotate(45deg);
-      border-radius: 4px;
-      opacity: 0.7;
-      animation: diamondGlow 4s ease-in-out infinite;
-      z-index: 0;
-    }
-    .hero-diamond::before {
-      content: '';
-      position: absolute;
-      inset: 10px;
-      border: 1px solid rgba(var(--accent-rgb), 0.3);
-      transform: rotate(0deg);
-    }
-
-    @keyframes diamondGlow {
-      0%, 100% { box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.25), 0 0 40px rgba(var(--accent-rgb), 0.08); opacity: 0.7; }
-      50%        { box-shadow: 0 0 32px rgba(var(--accent-rgb), 0.5), 0 0 70px rgba(var(--accent-rgb), 0.15); opacity: 1; }
-    }
-
-    /* Corner accent dots */
-    .hero-diamond::after {
-      content: '';
-      position: absolute;
-      top: -5px; right: -5px;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 12px var(--accent);
-    }
-
-    /* Photo circle clipped inside diamond */
-    .hero-photo-circle {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      overflow: hidden;
-      background: var(--bg3);
-      border: 2px solid rgba(var(--accent-rgb), 0.2);
-    }
-
-    .hero-photo-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: top center;
-      filter: grayscale(15%) contrast(1.05);
-      transition: filter 0.4s;
-    }
-    .hero-photo-circle:hover img { filter: grayscale(0%) contrast(1.08); }
-
-    /* Floating accent corner lines */
-    .hero-corner {
-      position: absolute;
-      width: 24px; height: 24px;
-      z-index: 3;
-    }
-    .hero-corner-tl { top: -30px; left: -30px; border-top: 2px solid var(--accent); border-left: 2px solid var(--accent); }
-    .hero-corner-tr { top: -30px; right: -30px; border-top: 2px solid var(--accent); border-right: 2px solid var(--accent); }
-    .hero-corner-bl { bottom: -30px; left: -30px; border-bottom: 2px solid var(--accent); border-left: 2px solid var(--accent); }
-    .hero-corner-br { bottom: -30px; right: -30px; border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent); }
-
-    /* Floating orbit ring */
-    .hero-orbit {
-      position: absolute;
-      inset: -48px;
-      border: 1px dashed rgba(var(--accent-rgb), 0.18);
-      border-radius: 50%;
-      animation: orbit 18s linear infinite;
-      z-index: 0;
-    }
-    @keyframes orbit { to { transform: rotate(360deg); } }
-
-    /* Floating badge — "Available 2026" */
-    .hero-float-badge {
-      position: absolute;
-      bottom: -20px;
-      right: -30px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 88px; height: 88px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.52rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      line-height: 1.4;
-      box-shadow: 0 0 24px rgba(var(--accent-rgb), 0.15);
-      animation: floatBadge 3s ease-in-out infinite;
-      z-index: 4;
-    }
-    @keyframes floatBadge {
-      0%,100% { transform: translateY(0); }
-      50%       { transform: translateY(-8px); }
-    }
-    .hero-float-badge strong {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--accent);
-      display: block;
-      font-family: 'Cormorant Garamond', serif;
     }
 
     /* ── SECTION COMMON ── */
@@ -1197,24 +1038,9 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      #hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-        padding-top: 80px;
-        padding-bottom: 60px;
-      }
-      .hero-left { padding: 40px 0 0; }
-      .hero-right {
-        height: auto;
-        min-height: unset;
-        padding: 20px 0 40px;
-        order: -1;
-      }
-      .hero-photo-wrap {
-        width: min(260px, 70vw);
-      }
-      .hero-stats { gap: 0; flex-wrap: wrap; }
-      .stat-item { padding: 0 1.2rem 0 0; margin-right: 1.2rem; }
+      #hero { grid-template-columns: 1fr; gap: 40px; min-height: auto; padding-top: 100px; }
+      .hero-grid-deco { display: none; }
+      .hero-stats { max-width: 360px; }
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .exp-item { grid-template-columns: 1fr; gap: 12px; }
       .projects-grid { grid-template-columns: 1fr; }
@@ -1225,9 +1051,7 @@
     }
 
     @media (max-width: 600px) {
-      .stat-num { font-size: 1.8rem; }
-      .hero-float-badge { width: 70px; height: 70px; font-size: 0.44rem; }
-      .hero-float-badge strong { font-size: 0.7rem; }
+      .stat-num { font-size: 2.2rem; }
     }
   </style>
 </head>
@@ -1264,37 +1088,28 @@
 
   <!-- ── HERO ── -->
   <section id="hero">
+    <div class="hero-bg-line"></div>
+    <div class="hero-grid-deco"></div>
 
-    <!-- LEFT CONTENT -->
     <div class="hero-left fade-up">
-      <div class="hero-name-small">Final Year 2026 · AI/ML Engineer</div>
-
-      <p class="hero-hello">Hello, I'm</p>
-      <h1 class="hero-name">Lathika M<br><em></em></h1>
-
+      <div class="hero-eyebrow">Final Year 2026 · AI/ML Engineer</div>
+      <h1 class="hero-name">Lathika<br><em>M</em></h1>
       <p class="hero-title">Data Scientist &nbsp;·&nbsp; Prompt Engineer &nbsp;·&nbsp; CV Researcher</p>
-
-      <div class="hero-divider"></div>
-
       <p class="hero-desc">
-        Final-year AI/ML undergraduate with <strong style="color:var(--text);font-weight:500;">3 industry internships</strong>, building real-world systems from GPU-accelerated traffic detection to LLM-powered analytics. I turn messy data into elegant solutions.
+        Final-year AI/ML undergraduate with <strong>3 industry internships</strong>, building real-world systems from GPU-accelerated traffic detection to LLM-powered analytics. I turn messy data into elegant solutions.
       </p>
-
-      <div class="hero-badge">Available for full-time roles · 2026</div>
-
       <div class="hero-actions">
         <a href="#projects" class="btn-primary">View My Work</a>
-        <a href="#contact" class="btn-secondary">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          Get in Touch
-        </a>
+        <a href="#contact" class="btn-secondary">Get in Touch</a>
         <a href="Lathika_AIML_Resume.pdf" download="Lathika_M_Resume.pdf" class="btn-resume">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Resume
         </a>
       </div>
+      <div class="hero-badge">Available for full-time roles · 2026</div>
+    </div>
 
-      <!-- STATS ROW -->
+    <div class="hero-right fade-up" style="transition-delay:0.15s">
       <div class="hero-stats">
         <div class="stat-item">
           <div class="stat-num">8.44</div>
@@ -1310,40 +1125,10 @@
         </div>
         <div class="stat-item">
           <div class="stat-num">30+</div>
-          <div class="stat-label">FPS Real-Time</div>
+          <div class="stat-label">FPS · Real-Time</div>
         </div>
       </div>
     </div>
-
-    <!-- RIGHT — PHOTO FRAME -->
-    <div class="hero-right fade-up" style="transition-delay:0.18s">
-      <div class="hero-photo-wrap">
-        <!-- Orbit ring -->
-        <div class="hero-orbit"></div>
-
-        <!-- Diamond border -->
-        <div class="hero-diamond"></div>
-
-        <!-- Corner marks -->
-        <div class="hero-corner hero-corner-tl"></div>
-        <div class="hero-corner hero-corner-tr"></div>
-        <div class="hero-corner hero-corner-bl"></div>
-        <div class="hero-corner hero-corner-br"></div>
-
-        <!-- Photo -->
-        <div class="hero-photo-circle">
-          <img src="assets/lathika-photo.jpg" alt="Lathika M — AI/ML Engineer"
-               onerror="this.style.display='none'; this.parentNode.style.background='linear-gradient(135deg, var(--bg3) 0%, var(--surface) 100%)'">
-        </div>
-
-        <!-- Floating badge -->
-        <div class="hero-float-badge">
-          <strong>2026</strong>
-          Open to<br>Roles
-        </div>
-      </div>
-    </div>
-
   </section>
 
   <!-- ── ABOUT ── -->
